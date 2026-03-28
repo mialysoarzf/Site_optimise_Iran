@@ -1,0 +1,48 @@
+name: site-informatif-iran
+
+services:
+  db:
+    image: postgres:17.5
+    container_name: site-informatif-iran-db
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: app_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontoffice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: site-informatif-iran-frontoffice
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Frontoffice:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+
+  backoffice:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: site-informatif-iran-backoffice
+    ports:
+      - "8081:80"
+    volumes:
+      - ./Backoffice:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
