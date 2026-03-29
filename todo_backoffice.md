@@ -33,11 +33,7 @@ OBJECTIF
 - Logout propre (destroy session + cookie session).
 - Verrouillage de toutes routes /admin/* hors /admin/login.
 
-4) GESTION DES ROLES
-- Contrôler le rôle user (admin/editor).
-- Limiter actions critiques (suppression, publication) selon rôle.
-
-5) DASHBOARD
+4) DASHBOARD
 - Compteurs:
   - total articles
   - brouillons
@@ -45,7 +41,7 @@ OBJECTIF
   - catégories
 - Liste des derniers articles modifiés.
 
-6) MODULE ARTICLES (CRUD)
+5) MODULE ARTICLES (CRUD)
 - Liste paginée + recherche par titre.
 - Formulaire création:
   - title, slug, excerpt, content
@@ -60,42 +56,42 @@ OBJECTIF
   - status valide
 - Génération slug auto depuis le titre (modifiable manuellement).
 
-7) MODULE CATEGORIES (CRUD)
+6) MODULE CATEGORIES (CRUD)
 - Liste catégories.
 - Création/édition/suppression.
 - Slug unique obligatoire.
 - Empêcher suppression si impact non géré (ou passer category_id à NULL).
 
-8) MODULE IMAGES
+7) MODULE IMAGES
 - Upload image pour article.
 - Validation type/taille (jpg/png/webp).
 - Sauvegarder chemin + alt dans table images.
 - Associer image à article.
 - Suppression fichier + enregistrement DB.
 
-9) REGLES DE PUBLICATION
+8) REGLES DE PUBLICATION
 - draft = invisible en front.
 - published = visible en front.
 - Si publication différée ajoutée plus tard: prévoir published_at.
 
-10) SECURITE MINIMALE
+9) SECURITE MINIMALE
 - Requêtes préparées partout (PDO).
 - Validation/sanitization de toutes entrées.
 - Protection CSRF sur formulaires POST.
 - Échappement HTML en sortie (anti XSS).
 - Messages d'erreurs non sensibles (pas de stack trace en prod).
 
-11) UX BACKOFFICE
+10) UX BACKOFFICE
 - Messages flash (succès/erreur).
 - Formulaires pré-remplis en cas d'erreur.
 - Boutons explicites (Enregistrer / Publier / Supprimer).
 
-12) SEO COTE ADMIN (DONNEES)
+11) SEO COTE ADMIN (DONNEES)
 - Exiger meta_title/meta_description sur publication.
 - Prévisualisation snippet SEO (optionnel mais utile).
 - Alerte si longueur meta non optimale.
 
-13) TESTS FONCTIONNELS A FAIRE
+12) TESTS FONCTIONNELS A FAIRE
 - Login valide/invalide.
 - Accès non connecté à /admin/* interdit.
 - Création article draft puis publication.
@@ -103,10 +99,9 @@ OBJECTIF
 - Upload image invalide refusé.
 - Suppression article supprime images liées (cascade DB + fichiers).
 
-15) PREPARATION LIVRABLE
+13) PREPARATION LIVRABLE
 - Fichier SQL importable.
-- Compte admin seed (username: user) avec mot de passe hashé.
+- Compte admin seed (username: user) avec mot de passe hashé(mot de passe : pass).
 - README avec:
-  - URL admin
-  - identifiants démo
-  - étapes de lancement Docker
+  - URL du backoffice
+  - Description des fonctionnalites implementes
