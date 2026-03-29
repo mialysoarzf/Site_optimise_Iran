@@ -27,14 +27,20 @@
                 <td><?= e((string) $item['title']) ?></td>
                 <td><?= e((string) $item['slug']) ?></td>
                 <td><?= e((string) ($item['category_name'] ?? '—')) ?></td>
-                <td><?= e((string) $item['status']) ?></td>
-                <td><?= e((string) $item['updated_at']) ?></td>
                 <td>
+                    <span class="badge <?= $item['status'] === 'published' ? 'badge-success' : 'badge-muted' ?>">
+                        <?= e((string) $item['status']) ?>
+                    </span>
+                </td>
+                <td><?= e((string) $item['updated_at']) ?></td>
+                <td class="cell-actions">
+                    <div class="action-group">
                     <a class="btn btn-small" href="/admin/articles/edit/<?= (int) $item['id'] ?>">Modifier</a>
                     <form method="post" action="/admin/articles/delete/<?= (int) $item['id'] ?>" class="inline-form" onsubmit="return confirm('Confirmer la suppression ?')">
                         <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
                         <button class="btn btn-danger btn-small" type="submit">Supprimer</button>
                     </form>
+                    </div>
                 </td>
             </tr>
         <?php endforeach; ?>

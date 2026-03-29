@@ -1,6 +1,8 @@
 -- Données de démonstration Backoffice (PostgreSQL)
 -- Exécuter APRÈS base.sql
 
+SET client_encoding = 'UTF8';
+
 BEGIN;
 
 -- 1) Catégories
@@ -29,7 +31,7 @@ VALUES
 (
   'Chronologie du conflit Iran 2026 : les dates clés',
   'chronologie-conflit-iran-2026',
-  'Résumé des événements majeurs des dernières semaines.',
+  U&'R\00E9sum\00E9 des \00E9v\00E9nements majeurs des derni\00E8res semaines.',
   $$
 <h2>Contexte</h2>
 <p>Ce dossier présente les faits principaux du conflit en Iran.</p>
@@ -48,7 +50,7 @@ VALUES
 (
   'Négociations diplomatiques : où en est-on ?',
   'negociations-diplomatiques-ou-en-est-on',
-  'Point d''étape sur les discussions internationales en cours.',
+  U&'Point d''\00E9tape sur les discussions internationales en cours.',
   $$
 <h2>État des discussions</h2>
 <p>Plusieurs acteurs diplomatiques participent aux pourparlers.</p>
@@ -57,10 +59,10 @@ VALUES
   $$,
   (SELECT id FROM categories WHERE slug = 'diplomatie-internationale' LIMIT 1),
   (SELECT id FROM users WHERE username = 'user' LIMIT 1),
-  'draft',
+  'published',
   'Négociations diplomatiques Iran - Situation actuelle',
-  'Analyse des discussions diplomatiques autour du conflit en Iran.',
-  NULL
+  U&'Analyse des discussions diplomatiques autour du conflit en Iran.',
+  NOW()
 )
 ON CONFLICT (slug) DO UPDATE
 SET

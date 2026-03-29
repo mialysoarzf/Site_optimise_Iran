@@ -19,12 +19,14 @@
                 <td><?= e((string) $category['name']) ?></td>
                 <td><?= e((string) $category['slug']) ?></td>
                 <td><?= e((string) $category['created_at']) ?></td>
-                <td>
+                <td class="cell-actions">
+                    <div class="action-group">
                     <a class="btn btn-small" href="/admin/categories/edit/<?= (int) $category['id'] ?>">Modifier</a>
                     <form method="post" action="/admin/categories/delete/<?= (int) $category['id'] ?>" class="inline-form" onsubmit="return confirm('Confirmer la suppression ?')">
                         <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
                         <button class="btn btn-danger btn-small" type="submit">Supprimer</button>
                     </form>
+                    </div>
                 </td>
             </tr>
         <?php endforeach; ?>
