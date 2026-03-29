@@ -9,7 +9,4 @@ RUN apt-get update \
 
 WORKDIR /var/www/html
 
-COPY docker/bootstrap-assets.sh /usr/local/bin/bootstrap-assets.sh
-RUN chmod +x /usr/local/bin/bootstrap-assets.sh
-
-CMD ["sh", "/usr/local/bin/bootstrap-assets.sh"]
+CMD ["apache2-foreground"]

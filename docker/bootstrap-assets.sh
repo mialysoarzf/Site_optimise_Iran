@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -eu
 
 ASSETS_DIR="/var/www/html/public/assets"
 FONTS_DIR="$ASSETS_DIR/fonts"
