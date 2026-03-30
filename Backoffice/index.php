@@ -2,33 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Auth;
-use App\Controllers\AdminController;
-use App\Controllers\ArticleController;
-use App\Controllers\AuthController;
-use App\Controllers\CategoryController;
-use App\Database;
-use App\Repositories\ArticleRepository;
-use App\Repositories\CategoryRepository;
-use App\Repositories\DashboardRepository;
-use App\Repositories\ImageRepository;
-use App\Repositories\UserRepository;
-
 require __DIR__ . '/bootstrap.php';
 
-$pdo = Database::connection($config['db']);
-
-$users = new UserRepository($pdo);
-$auth = new Auth($users);
-$dashboardController = new AdminController(new DashboardRepository($pdo));
-$authController = new AuthController($auth);
-$categoryController = new CategoryController(new CategoryRepository($pdo));
-$articleController = new ArticleController(
-    new ArticleRepository($pdo),
-    new CategoryRepository($pdo),
-    new ImageRepository($pdo),
-    $config
-);
+$pdo = bo_db($config['db']);
 
 $currentPath = path();
 
@@ -36,103 +12,103 @@ $publicRoutes = [
     '/admin/login',
 ];
 
-if (!$auth->check() && !in_array($currentPath, $publicRoutes, true)) {
+if (!bo_auth_check() && !in_array($currentPath, $publicRoutes, true)) {
     redirect('/admin/login');
 }
 
-if ($auth->check() && $currentPath === '/admin/login' && method_is('GET')) {
+if (bo_auth_check() && $currentPath === '/admin/login' && method_is('GET')) {
     redirect('/admin/dashboard');
 }
 
 if ($currentPath === '/') {
-    redirect($auth->check() ? '/admin/dashboard' : '/admin/login');
+    redirect(bo_auth_check() ? '/admin/dashboard' : '/admin/login');
 }
 
 $matched = false;
 
 if ($currentPath === '/admin/login' && method_is('GET')) {
     $matched = true;
-    $authController->loginForm();
+    bo_show_login();
 }
 
 if ($currentPath === '/admin/login' && method_is('POST')) {
     $matched = true;
-    $authController->login();
+    bo_login($pdo);
 }
 
 if ($currentPath === '/admin/logout' && method_is('POST')) {
     $matched = true;
-    $authController->logout();
+    bo_logout();
 }
 
 if ($currentPath === '/admin/dashboard' && method_is('GET')) {
     $matched = true;
-    $dashboardController->dashboard();
+    bo_dashboard($pdo);
 }
 
 if ($currentPath === '/admin/categories' && method_is('GET')) {
     $matched = true;
-    $categoryController->index();
+    bo_categories_index($pdo);
 }
 
 if ($currentPath === '/admin/categories/create' && method_is('GET')) {
     $matched = true;
-    $categoryController->createForm();
+    bo_categories_create_form();
 }
 
 if ($currentPath === '/admin/categories/create' && method_is('POST')) {
     $matched = true;
-    $categoryController->create();
+    bo_categories_create_action($pdo);
 }
 
 if (preg_match('#^/admin/categories/edit/(\d+)$#', $currentPath, $m) && method_is('GET')) {
     $matched = true;
-    $categoryController->editForm((int) $m[1]);
+    bo_categories_edit_form($pdo, (int) $m[1]);
 }
 
 if (preg_match('#^/admin/categories/edit/(\d+)$#', $currentPath, $m) && method_is('POST')) {
     $matched = true;
-    $categoryController->update((int) $m[1]);
+    bo_categories_update_action($pdo, (int) $m[1]);
 }
 
 if (preg_match('#^/admin/categories/delete/(\d+)$#', $currentPath, $m) && method_is('POST')) {
     $matched = true;
-    $categoryController->delete((int) $m[1]);
+    bo_categories_delete_action($pdo, (int) $m[1]);
 }
 
 if ($currentPath === '/admin/articles' && method_is('GET')) {
     $matched = true;
-    $articleController->index();
+    bo_articles_index($pdo);
 }
 
 if ($currentPath === '/admin/articles/create' && method_is('GET')) {
     $matched = true;
-    $articleController->createForm();
+    bo_articles_create_form($pdo, $config);
 }
 
 if ($currentPath === '/admin/articles/create' && method_is('POST')) {
     $matched = true;
-    $articleController->create($auth->id() ?? 1);
+    bo_articles_create_action($pdo, $config, bo_auth_id() ?? 1);
 }
 
 if ($currentPath === '/admin/articles/editor-upload' && method_is('POST')) {
     $matched = true;
-    $articleController->uploadEditorImage();
+    bo_articles_editor_upload($config);
 }
 
 if (preg_match('#^/admin/articles/edit/(\d+)$#', $currentPath, $m) && method_is('GET')) {
     $matched = true;
-    $articleController->editForm((int) $m[1]);
+    bo_articles_edit_form($pdo, $config, (int) $m[1]);
 }
 
 if (preg_match('#^/admin/articles/edit/(\d+)$#', $currentPath, $m) && method_is('POST')) {
     $matched = true;
-    $articleController->update((int) $m[1]);
+    bo_articles_update_action($pdo, $config, (int) $m[1]);
 }
 
 if (preg_match('#^/admin/articles/delete/(\d+)$#', $currentPath, $m) && method_is('POST')) {
     $matched = true;
-    $articleController->delete((int) $m[1]);
+    bo_articles_delete_action($pdo, (int) $m[1]);
 }
 
 if (!$matched) {

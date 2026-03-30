@@ -21,7 +21,7 @@ $username = $_SESSION['admin_username'] ?? null;
                 <a href="/admin/articles">Articles</a>
                 <a href="/admin/categories">Catégories</a>
                 <form method="post" action="/admin/logout" class="inline-form">
-                    <input type="hidden" name="_csrf" value="<?= e(App\Csrf::token()) ?>">
+                    <input type="hidden" name="_csrf" value="<?= e(bo_csrf_token()) ?>">
                     <button type="submit" class="btn btn-link">Déconnexion (<?= e((string) $username) ?>)</button>
                 </form>
             </nav>
