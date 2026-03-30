@@ -1,9 +1,11 @@
 <?php
-$action = $mode === 'edit' ? '/admin/categories/edit/' . (int) ($category['id'] ?? 0) : '/admin/categories/create';
+$action = $mode === 'edit'
+  ? '/categories/edit/' . (int) ($category['id'] ?? 0)
+  : '/categories/create';
 ?>
 <section class="section-header">
     <h1><?= $mode === 'edit' ? 'Modifier catégorie' : 'Créer catégorie' ?></h1>
-    <a class="btn btn-secondary" href="/admin/categories">Retour</a>
+  <a class="btn btn-secondary" href="/categories">Retour</a>
 </section>
 
 <form class="card form-grid" method="post" action="<?= e($action) ?>">

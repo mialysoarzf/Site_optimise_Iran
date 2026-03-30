@@ -1,9 +1,11 @@
 <?php
-$action = $mode === 'edit' ? '/admin/articles/edit/' . (int) ($article['id'] ?? 0) : '/admin/articles/create';
+$action = $mode === 'edit'
+  ? '/articles/edit/' . (int) ($article['id'] ?? 0)
+  : '/articles/create';
 ?>
 <section class="section-header">
     <h1><?= $mode === 'edit' ? 'Modifier article' : 'Créer article' ?></h1>
-    <a class="btn btn-secondary" href="/admin/articles">Retour</a>
+  <a class="btn btn-secondary" href="/articles">Retour</a>
 </section>
 
 <form class="card form-grid" method="post" action="<?= e($action) ?>" enctype="multipart/form-data">
@@ -104,7 +106,7 @@ if (window.tinymce) {
       const formData = new FormData();
       formData.append('file', blobInfo.blob(), blobInfo.filename());
 
-      fetch('/admin/articles/editor-upload', {
+      fetch('/articles/editor-upload', {
         method: 'POST',
         body: formData,
         headers: {

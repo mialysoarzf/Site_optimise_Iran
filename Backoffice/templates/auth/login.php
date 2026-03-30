@@ -2,7 +2,7 @@
     <h1>Connexion admin</h1>
     <p class="muted">Accès sécurisé au backoffice.</p>
 
-    <form action="/admin/login" method="post" class="form-grid">
+    <form action="/traitementLogin" method="post" class="form-grid">
         <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
 
         <label for="username">Nom d'utilisateur</label>

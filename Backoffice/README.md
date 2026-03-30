@@ -2,7 +2,7 @@
 
 ## URL du backoffice
 
-- <http://localhost:8081/admin/login>
+- <http://localhost:8081/login>
 
 ## Compte admin seed
 
@@ -12,7 +12,10 @@
 ## Fonctionnalités implémentées
 
 - Authentification admin sécurisée (`password_verify`, session régénérée)
-- Routes propres sans `.php` via `mod_rewrite`
+- Navigation PHP classique (pages et traitements `.php`)
+- URLs réécrites sans `.php` (ex: `/articles/edit/1`, `/categories/edit/2`)
+- CRUD Articles regroupé dans un seul point d'entrée (`articlesCrud.php`)
+- CRUD Catégories regroupé dans un seul point d'entrée (`categoriesCrud.php`)
 - Dashboard avec compteurs + derniers articles modifiés
 - CRUD articles (pagination + recherche + slug unique + statut)
 - CRUD catégories (slug unique, suppression avec détachement des articles)
@@ -28,4 +31,4 @@
 
 1. `docker-compose up -d`
 2. Importer `base.sql` dans PostgreSQL.
-3. Ouvrir <http://localhost:8081/admin/login>.
+3. Ouvrir <http://localhost:8081/login>.
