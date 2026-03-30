@@ -1,6 +1,6 @@
 <section class="section-header">
     <h1>Catégories</h1>
-    <a class="btn" href="/admin/categories/create">Créer une catégorie</a>
+    <a class="btn" href="/categories/create">Créer une catégorie</a>
 </section>
 
 <section class="card">
@@ -21,8 +21,8 @@
                 <td><?= e((string) $category['created_at']) ?></td>
                 <td class="cell-actions">
                     <div class="action-group">
-                    <a class="btn btn-small" href="/admin/categories/edit/<?= (int) $category['id'] ?>">Modifier</a>
-                    <form method="post" action="/admin/categories/delete/<?= (int) $category['id'] ?>" class="inline-form" onsubmit="return confirm('Confirmer la suppression ?')">
+                    <a class="btn btn-small" href="/categories/edit/<?= (int) $category['id'] ?>">Modifier</a>
+                    <form method="post" action="/categories/delete/<?= (int) $category['id'] ?>" class="inline-form" onsubmit="return confirm('Confirmer la suppression ?')">
                         <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
                         <button class="btn btn-danger btn-small" type="submit">Supprimer</button>
                     </form>

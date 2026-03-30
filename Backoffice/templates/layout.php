@@ -14,13 +14,13 @@ $username = $_SESSION['admin_username'] ?? null;
 <body>
 <header class="topbar">
     <div class="container topbar-row">
-        <a class="logo" href="/admin/dashboard">Iran Infos · Admin</a>
+        <a class="logo" href="/dashboard">Iran Infos · Admin</a>
         <?php if ($username): ?>
             <nav class="nav">
-                <a href="/admin/dashboard">Dashboard</a>
-                <a href="/admin/articles">Articles</a>
-                <a href="/admin/categories">Catégories</a>
-                <form method="post" action="/admin/logout" class="inline-form">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/articles">Articles</a>
+                <a href="/categories">Catégories</a>
+                <form method="post" action="/logout" class="inline-form">
                     <input type="hidden" name="_csrf" value="<?= e(bo_csrf_token()) ?>">
                     <button type="submit" class="btn btn-link">Déconnexion (<?= e((string) $username) ?>)</button>
                 </form>

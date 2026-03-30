@@ -2,15 +2,15 @@
 
 ## 1) Accès
 
-- URL: <http://localhost:8081/admin/login>
+- URL: <http://localhost:8081/login>
 - Username: `user`
 - Password: `pass`
 
 ## 2) Test rapide
 
-1. Ouvrir `/admin/login`.
+1. Ouvrir `/login`.
 1. Se connecter avec `user` / `pass`.
-1. Vérifier la redirection vers `/admin/dashboard`.
+1. Vérifier la redirection vers `/dashboard`.
 1. Aller dans `Catégories` et vérifier la présence de `Conflit Iran 2026` (`conflit-iran-2026`) et `Diplomatie internationale` (`diplomatie-internationale`).
 1. Aller dans `Articles` et vérifier qu'il y a 2 articles `published`.
 
@@ -71,4 +71,4 @@ Pour éviter les textes cassés (`d'??tape`), importer les SQL via fichiers dans
 
   `docker-compose exec -T db psql -U app_user -d app_db -f /tmp/demo_seed.sql`
 
-1. Se reconnecter sur <http://localhost:8081/admin/login>.
+1. Se reconnecter sur <http://localhost:8081/login>.

@@ -22,7 +22,7 @@
         <tbody>
         <?php foreach ($latestArticles as $item): ?>
             <tr>
-                <td><a href="/admin/articles/edit/<?= (int) $item['id'] ?>"><?= e((string) $item['title']) ?></a></td>
+                <td><a href="/articles/edit/<?= (int) $item['id'] ?>"><?= e((string) $item['title']) ?></a></td>
                 <td><?= e((string) ($item['category_name'] ?? '—')) ?></td>
                 <td><?= e((string) $item['status']) ?></td>
                 <td><?= e((string) $item['updated_at']) ?></td>

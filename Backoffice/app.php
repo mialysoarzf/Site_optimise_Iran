@@ -452,7 +452,7 @@ function bo_process_upload(array $config, ?array $file): array
 function bo_show_login(): void
 {
     if (bo_auth_check()) {
-        redirect('/admin/dashboard');
+        redirect('/dashboard');
     }
 
     view('auth/login', [
@@ -466,7 +466,7 @@ function bo_login(PDO $pdo): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/login');
+        redirect('/login');
     }
 
     $username = trim((string) ($_POST['username'] ?? ''));
@@ -476,30 +476,30 @@ function bo_login(PDO $pdo): void
 
     if ($username === '' || $password === '') {
         set_flash('error', 'Identifiants requis.');
-        redirect('/admin/login');
+        redirect('/login');
     }
 
     if (!bo_auth_attempt($pdo, $username, $password)) {
         set_flash('error', 'Identifiants invalides.');
-        redirect('/admin/login');
+        redirect('/login');
     }
 
     clear_old();
     set_flash('success', 'Connexion réussie.');
-    redirect('/admin/dashboard');
+    redirect('/dashboard');
 }
 
 function bo_logout(): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/dashboard');
+        redirect('/dashboard');
     }
 
     bo_auth_logout();
     session_start();
     set_flash('success', 'Déconnexion réussie.');
-    redirect('/admin/login');
+    redirect('/login');
 }
 
 function bo_dashboard(PDO $pdo): void
@@ -537,7 +537,7 @@ function bo_categories_create_action(PDO $pdo): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/categories/create');
+        redirect('/categories/create');
     }
 
     $name = trim((string) ($_POST['name'] ?? ''));
@@ -547,18 +547,18 @@ function bo_categories_create_action(PDO $pdo): void
 
     if ($name === '' || $slug === '') {
         set_flash('error', 'Nom et slug obligatoires.');
-        redirect('/admin/categories/create');
+        redirect('/categories/create');
     }
 
     if (bo_categories_slug_exists($pdo, $slug)) {
         set_flash('error', 'Ce slug existe déjà.');
-        redirect('/admin/categories/create');
+        redirect('/categories/create');
     }
 
     bo_categories_create($pdo, ['name' => $name, 'slug' => $slug]);
     clear_old();
     set_flash('success', 'Catégorie créée.');
-    redirect('/admin/categories');
+    redirect('/categories');
 }
 
 function bo_categories_edit_form(PDO $pdo, int $id): void
@@ -587,7 +587,7 @@ function bo_categories_update_action(PDO $pdo, int $id): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/categories/edit/' . $id);
+        redirect('/categories/edit/' . $id);
     }
 
     $name = trim((string) ($_POST['name'] ?? ''));
@@ -597,25 +597,25 @@ function bo_categories_update_action(PDO $pdo, int $id): void
 
     if ($name === '' || $slug === '') {
         set_flash('error', 'Nom et slug obligatoires.');
-        redirect('/admin/categories/edit/' . $id);
+        redirect('/categories/edit/' . $id);
     }
 
     if (bo_categories_slug_exists($pdo, $slug, $id)) {
         set_flash('error', 'Ce slug existe déjà.');
-        redirect('/admin/categories/edit/' . $id);
+        redirect('/categories/edit/' . $id);
     }
 
     bo_categories_update($pdo, $id, ['name' => $name, 'slug' => $slug]);
     clear_old();
     set_flash('success', 'Catégorie mise à jour.');
-    redirect('/admin/categories');
+    redirect('/categories');
 }
 
 function bo_categories_delete_action(PDO $pdo, int $id): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/categories');
+        redirect('/categories');
     }
 
     $count = bo_categories_article_count($pdo, $id);
@@ -627,7 +627,7 @@ function bo_categories_delete_action(PDO $pdo, int $id): void
     }
 
     bo_categories_delete($pdo, $id);
-    redirect('/admin/categories');
+    redirect('/categories');
 }
 
 function bo_articles_index(PDO $pdo): void
@@ -663,7 +663,7 @@ function bo_articles_create_action(PDO $pdo, array $config, int $authorId): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/articles/create');
+        redirect('/articles/create');
     }
 
     $data = bo_sanitize_article_input();
@@ -688,7 +688,7 @@ function bo_articles_create_action(PDO $pdo, array $config, int $authorId): void
         foreach ($errors as $error) {
             set_flash('error', $error);
         }
-        redirect('/admin/articles/create');
+        redirect('/articles/create');
     }
 
     $data['author_id'] = $authorId;
@@ -700,7 +700,7 @@ function bo_articles_create_action(PDO $pdo, array $config, int $authorId): void
 
     clear_old();
     set_flash('success', 'Article créé.');
-    redirect('/admin/articles');
+    redirect('/articles');
 }
 
 function bo_articles_edit_form(PDO $pdo, array $config, int $id): void
@@ -744,7 +744,7 @@ function bo_articles_update_action(PDO $pdo, array $config, int $id): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/articles/edit/' . $id);
+        redirect('/articles/edit/' . $id);
     }
 
     $article = bo_articles_find($pdo, $id);
@@ -776,7 +776,7 @@ function bo_articles_update_action(PDO $pdo, array $config, int $id): void
         foreach ($errors as $error) {
             set_flash('error', $error);
         }
-        redirect('/admin/articles/edit/' . $id);
+        redirect('/articles/edit/' . $id);
     }
 
     bo_articles_update($pdo, $id, $data);
@@ -809,14 +809,14 @@ function bo_articles_update_action(PDO $pdo, array $config, int $id): void
 
     clear_old();
     set_flash('success', 'Article mis à jour.');
-    redirect('/admin/articles');
+    redirect('/articles');
 }
 
 function bo_articles_delete_action(PDO $pdo, int $id): void
 {
     if (!bo_csrf_verify($_POST['_csrf'] ?? null)) {
         set_flash('error', 'Token CSRF invalide.');
-        redirect('/admin/articles');
+        redirect('/articles');
     }
 
     $image = bo_images_delete_by_article($pdo, $id);
@@ -830,7 +830,7 @@ function bo_articles_delete_action(PDO $pdo, int $id): void
     }
 
     set_flash('success', 'Article supprimé.');
-    redirect('/admin/articles');
+    redirect('/articles');
 }
 
 function bo_articles_editor_upload(array $config): void
