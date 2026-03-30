@@ -21,7 +21,7 @@ services:
   frontoffice:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.frontoffice
     container_name: site-informatif-iran-frontoffice
     ports:
       - "8080:80"
@@ -34,7 +34,7 @@ services:
   backoffice:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.backoffice
     container_name: site-informatif-iran-backoffice
     environment:
       TINYMCE_API_KEY: ${TINYMCE_API_KEY:-no-api-key}

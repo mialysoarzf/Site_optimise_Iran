@@ -8,16 +8,24 @@ $action = $mode === 'edit'
   <a class="btn btn-secondary" href="/categories">Retour</a>
 </section>
 
-<form class="card form-grid" method="post" action="<?= e($action) ?>">
+<form class="card form-grid category-form" method="post" action="<?= e($action) ?>">
     <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
 
-    <label for="name">Nom *</label>
-    <input id="name" name="name" required value="<?= e((string) ($category['name'] ?? '')) ?>">
+  <div class="form-row">
+    <div class="field">
+      <label for="name">Nom *</label>
+      <input id="name" name="name" required placeholder="Ex: Conflit Iran 2026" value="<?= e((string) ($category['name'] ?? '')) ?>">
+    </div>
 
-    <label for="slug">Slug *</label>
-    <input id="slug" name="slug" required value="<?= e((string) ($category['slug'] ?? '')) ?>">
+    <div class="field">
+      <label for="slug">Slug *</label>
+      <input id="slug" name="slug" required placeholder="Ex: conflit-iran-2026" value="<?= e((string) ($category['slug'] ?? '')) ?>">
+    </div>
+  </div>
 
+  <div class="actions field-full">
     <button type="submit" class="btn">Enregistrer</button>
+  </div>
 </form>
 
 <script>
