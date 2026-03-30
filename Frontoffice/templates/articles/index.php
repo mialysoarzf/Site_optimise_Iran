@@ -8,17 +8,19 @@
             <?php $itemRawImage = trim((string) ($item['image_url'] ?? '')); ?>
             <article class="list-card">
                 <?php if ($itemRawImage !== ''): ?>
-                    <img
-                        src="<?= e(optimized_image_url($itemRawImage, 800, 70)) ?>"
-                        srcset="<?= e(optimized_image_srcset($itemRawImage, [320, 480, 640, 800, 960], 70)) ?>"
-                        sizes="(max-width: 767px) 100vw, 50vw"
-                        alt="<?= e(safe_alt((string) ($item['image_alt'] ?? ''), 'Illustration de ' . (string) $item['title'])) ?>"
-                        class="list-card-image"
-                        loading="lazy"
-                        decoding="async"
-                        width="800"
-                        height="500"
-                    >
+                    <a href="/article/<?= e((string) $item['slug']) ?>" class="list-card-media-link" aria-label="Ouvrir l’article <?= e((string) $item['title']) ?>">
+                        <img
+                            src="<?= e(optimized_image_url($itemRawImage, 800, 70)) ?>"
+                            srcset="<?= e(optimized_image_srcset($itemRawImage, [320, 480, 640, 800, 960], 70)) ?>"
+                            sizes="(max-width: 767px) 100vw, 50vw"
+                            alt="<?= e(safe_alt((string) ($item['image_alt'] ?? ''), 'Illustration de ' . (string) $item['title'])) ?>"
+                            class="list-card-image"
+                            loading="lazy"
+                            decoding="async"
+                            width="800"
+                            height="500"
+                        >
+                    </a>
                 <?php endif; ?>
                 <div class="list-card-body">
                     <p class="card-meta">

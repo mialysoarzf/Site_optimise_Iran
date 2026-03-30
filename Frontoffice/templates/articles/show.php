@@ -17,17 +17,19 @@
                     <?php $imgAlt = safe_alt((string) ($image['alt'] ?? ''), 'Illustration de l\'article'); ?>
                     <?php $rawImage = trim((string) ($image['url'] ?? '')); ?>
                     <?php if ($rawImage !== ''): ?>
-                        <img
-                            src="<?= e(optimized_image_url($rawImage, 1200, 72)) ?>"
-                            srcset="<?= e(optimized_image_srcset($rawImage, [480, 768, 1024, 1200, 1600], 72)) ?>"
-                            sizes="(max-width: 960px) 100vw, 900px"
-                            alt="<?= e($imgAlt) ?>"
-                            class="article-image"
-                            loading="lazy"
-                            decoding="async"
-                            width="1200"
-                            height="760"
-                        >
+                        <a href="<?= e(optimized_image_url($rawImage, 1800, 78)) ?>" class="article-image-link" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir l’image en grand format">
+                            <img
+                                src="<?= e(optimized_image_url($rawImage, 1200, 72)) ?>"
+                                srcset="<?= e(optimized_image_srcset($rawImage, [480, 768, 1024, 1200, 1600], 72)) ?>"
+                                sizes="(max-width: 960px) 100vw, 900px"
+                                alt="<?= e($imgAlt) ?>"
+                                class="article-image"
+                                loading="lazy"
+                                decoding="async"
+                                width="1200"
+                                height="760"
+                            >
+                        </a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </section>
@@ -62,9 +64,11 @@
                             >
                         </a>
                     <?php endif; ?>
-                    <h3 class="card-title"><?= e((string) $item['title']) ?></h3>
-                    <p class="card-excerpt"><?= e((string) $relatedExcerpt) ?></p>
-                    <a href="/article/<?= e((string) $item['slug']) ?>" class="card-link">Lire</a>
+                    <div class="related-card-content">
+                        <h3 class="card-title"><?= e((string) $item['title']) ?></h3>
+                        <p class="card-excerpt"><?= e((string) $relatedExcerpt) ?></p>
+                        <a href="/article/<?= e((string) $item['slug']) ?>" class="card-link">Lire</a>
+                    </div>
                 </article>
             <?php endforeach; ?>
         </div>
