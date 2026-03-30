@@ -105,3 +105,50 @@ function safe_alt(?string $alt, string $fallback = 'Illustration'): string
 
     return $value;
 }
+
+function optimized_image_url(?string $path, int $width = 960, int $quality = 72): string
+{
+    $value = trim((string) $path);
+    if ($value === '') {
+        return '';
+    }
+
+    $width = max(160, min(2200, $width));
+    $quality = max(45, min(90, $quality));
+
+    $query = http_build_query([
+        'src' => $value,
+        'w' => $width,
+        'q' => $quality,
+    ]);
+
+    return '/img?' . $query;
+}
+
+function optimized_image_srcset(?string $path, array $widths, int $quality = 72): string
+{
+    $value = trim((string) $path);
+    if ($value === '') {
+        return '';
+    }
+
+    $validWidths = [];
+    foreach ($widths as $width) {
+        $w = (int) $width;
+        if ($w >= 160 && $w <= 2400) {
+            $validWidths[$w] = true;
+        }
+    }
+
+    if ($validWidths === []) {
+        return '';
+    }
+
+    ksort($validWidths);
+    $parts = [];
+    foreach (array_keys($validWidths) as $w) {
+        $parts[] = optimized_image_url($value, $w, $quality) . ' ' . $w . 'w';
+    }
+
+    return implode(', ', $parts);
+}
