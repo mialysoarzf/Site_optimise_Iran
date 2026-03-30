@@ -23,6 +23,8 @@ services:
       context: .
       dockerfile: Dockerfile.frontoffice
     container_name: site-informatif-iran-frontoffice
+    environment:
+      APP_BASE_URL_BACKOFFICE_INTERNAL: http://backoffice
     ports:
       - "8080:80"
     volumes:

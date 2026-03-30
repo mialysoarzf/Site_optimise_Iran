@@ -25,7 +25,6 @@
 - 404 dédiée avec code HTTP 404
 - Sécurité: échappement HTML (`htmlspecialchars`), requêtes préparées, validation slug
 
-
 ## Vérification Lighthouse (mobile + desktop)
 
 1. Lancer `docker-compose up -d`

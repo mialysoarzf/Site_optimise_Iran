@@ -1,12 +1,16 @@
 FROM php:8.3-apache
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends libpq-dev libonig-dev \
-	&& docker-php-ext-install pdo_pgsql mbstring \
-	&& a2enmod rewrite \
+	&& apt-get install -y --no-install-recommends libpq-dev libonig-dev curl ca-certificates libjpeg62-turbo-dev libpng-dev libwebp-dev \
+	&& docker-php-ext-configure gd --with-jpeg --with-webp \
+	&& docker-php-ext-install pdo_pgsql mbstring gd \
+	&& a2enmod rewrite headers expires \
 	&& apt-get purge -y --auto-remove \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
 
-CMD ["apache2-foreground"]
+COPY docker/bootstrap-assets-frontoffice.sh /usr/local/bin/bootstrap-assets-frontoffice.sh
+RUN chmod +x /usr/local/bin/bootstrap-assets-frontoffice.sh
+
+CMD ["sh", "/usr/local/bin/bootstrap-assets-frontoffice.sh"]
