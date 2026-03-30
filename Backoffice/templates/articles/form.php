@@ -19,7 +19,7 @@ $action = $mode === 'edit' ? '/admin/articles/edit/' . (int) ($article['id'] ?? 
     <textarea id="excerpt" name="excerpt" rows="3"><?= e((string) ($article['excerpt'] ?? '')) ?></textarea>
 
     <label for="content">Contenu *</label>
-    <textarea id="content" name="content" rows="12" required><?= e((string) ($article['content'] ?? '')) ?></textarea>
+    <textarea id="content" name="content" rows="12"><?= e((string) ($article['content'] ?? '')) ?></textarea>
 
     <label for="status">Statut *</label>
     <select id="status" name="status" required>
@@ -63,9 +63,14 @@ $action = $mode === 'edit' ? '/admin/articles/edit/' . (int) ($article['id'] ?? 
     </div>
 </form>
 
+<script src="https://cdn.tiny.cloud/1/<?= e((string) ($tinyMceApiKey ?? 'no-api-key')) ?>/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
 <script>
 const titleInput = document.getElementById('title');
 const slugInput = document.getElementById('slug');
+const articleForm = document.querySelector('form[action="<?= e($action) ?>"]');
+const csrfInput = document.querySelector('input[name="_csrf"]');
+
 if (titleInput && slugInput) {
   titleInput.addEventListener('input', () => {
     if (slugInput.dataset.touched === '1') return;
@@ -80,5 +85,56 @@ if (titleInput && slugInput) {
   slugInput.addEventListener('input', () => {
     slugInput.dataset.touched = '1';
   });
+}
+
+if (window.tinymce) {
+  tinymce.init({
+    selector: '#content',
+    height: 420,
+    menubar: false,
+    branding: false,
+    promotion: false,
+    plugins: 'lists link image table autoresize wordcount searchreplace',
+    toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | link image table | removeformat',
+    block_formats: 'Paragraphe=p; Titre section=h2; Sous-section=h3',
+    content_style: "body { font-family: Inter, Arial, sans-serif; font-size: 15px; line-height: 1.6; }",
+    paste_as_text: true,
+    language: 'fr_FR',
+    images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
+      const formData = new FormData();
+      formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+      fetch('/admin/articles/editor-upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRF-Token': csrfInput?.value || ''
+        },
+        credentials: 'same-origin'
+      })
+        .then(async (response) => {
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.location) {
+            throw new Error(data.error || 'Échec upload image');
+          }
+          resolve(data.location);
+        })
+        .catch((error) => reject(error.message || 'Échec upload image'));
+    })
+  });
+
+  if (articleForm) {
+    articleForm.addEventListener('submit', (event) => {
+      tinymce.triggerSave();
+
+      const editor = tinymce.get('content');
+      const plainText = editor ? editor.getContent({ format: 'text' }).trim() : '';
+      if (!plainText) {
+        event.preventDefault();
+        alert('Le contenu est obligatoire.');
+        editor?.focus();
+      }
+    });
+  }
 }
 </script>

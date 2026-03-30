@@ -115,6 +115,11 @@ if ($currentPath === '/admin/articles/create' && method_is('POST')) {
     $articleController->create($auth->id() ?? 1);
 }
 
+if ($currentPath === '/admin/articles/editor-upload' && method_is('POST')) {
+    $matched = true;
+    $articleController->uploadEditorImage();
+}
+
 if (preg_match('#^/admin/articles/edit/(\d+)$#', $currentPath, $m) && method_is('GET')) {
     $matched = true;
     $articleController->editForm((int) $m[1]);

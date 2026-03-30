@@ -7,6 +7,7 @@ return [
         'env' => getenv('APP_ENV') ?: 'prod',
         'name' => 'Iran War - Backoffice',
         'base_url' => getenv('APP_BASE_URL') ?: '',
+        'tiny_mce_api_key' => getenv('TINYMCE_API_KEY') ?: 'no-api-key',
         'upload_dir' => __DIR__ . '/../uploads',
         'max_upload_size' => 2 * 1024 * 1024,
     ],
