@@ -2,52 +2,57 @@
 
 declare(strict_types=1);
 
-use App\Controllers\FrontController;
-use App\Database;
-use App\Repositories\FrontRepository;
-
 require __DIR__ . '/bootstrap.php';
 
-$pdo = Database::connection($config['db']);
-$controller = new FrontController(new FrontRepository($pdo));
+$pdo = fo_db($config['db']);
 
-$currentPath = path();
+$GLOBALS['fo_ticker_items'] = array_values(array_filter(array_map(
+    static fn (array $row): array => [
+        'title' => trim((string) ($row['title'] ?? '')),
+        'slug' => trim((string) ($row['slug'] ?? '')),
+    ],
+    fo_latest_published($pdo, 8)
+), static fn (array $item): bool => $item['title'] !== '' && $item['slug'] !== ''));
+
+$uri = $_SERVER['REQUEST_URI'] ?? '/';
+$currentPath = parse_url($uri, PHP_URL_PATH) ?: '/';
+$currentPath = rtrim($currentPath, '/') ?: '/';
 
 if ($currentPath === '/') {
-    $controller->home();
+    fo_home($pdo);
     return;
 }
 
 if ($currentPath === '/articles') {
-    $controller->articles();
+    fo_articles($pdo);
     return;
 }
 
 if ($currentPath === '/a-propos') {
-    $controller->about();
+    fo_about();
     return;
 }
 
 if (preg_match('#^/article/([a-z0-9-]+)$#', $currentPath, $match)) {
     $slug = $match[1];
     if (!valid_slug($slug)) {
-        $controller->notFound();
+        fo_not_found();
         return;
     }
 
-    $controller->article($slug);
+    fo_article($pdo, $slug);
     return;
 }
 
 if (preg_match('#^/categorie/([a-z0-9-]+)$#', $currentPath, $match)) {
     $slug = $match[1];
     if (!valid_slug($slug)) {
-        $controller->notFound();
+        fo_not_found();
         return;
     }
 
-    $controller->category($slug);
+    fo_category($pdo, $slug);
     return;
 }
 
-$controller->notFound();
+fo_not_found();

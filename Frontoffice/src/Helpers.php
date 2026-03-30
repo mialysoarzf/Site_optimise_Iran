@@ -43,6 +43,10 @@ function view(string $template, array $params = []): void
         exit('Template introuvable');
     }
 
+    if (!array_key_exists('tickerItems', $params) && isset($GLOBALS['fo_ticker_items']) && is_array($GLOBALS['fo_ticker_items'])) {
+        $params['tickerItems'] = $GLOBALS['fo_ticker_items'];
+    }
+
     extract($params, EXTR_SKIP);
     require __DIR__ . '/../templates/layout.php';
 }
@@ -70,4 +74,34 @@ function article_meta_description(array $article): string
     }
 
     return excerpt_from_content((string) ($article['content'] ?? ''), 160);
+}
+
+function media_url(?string $path): string
+{
+    $value = trim((string) $path);
+    if ($value === '') {
+        return '';
+    }
+
+    if (preg_match('#^https?://#i', $value)) {
+        return $value;
+    }
+
+    $normalized = '/' . ltrim($value, '/');
+    if (str_starts_with($normalized, '/uploads/')) {
+        $base = rtrim((string) (getenv('APP_BASE_URL_BACKOFFICE') ?: 'http://localhost:8081'), '/');
+        return $base . $normalized;
+    }
+
+    return $normalized;
+}
+
+function safe_alt(?string $alt, string $fallback = 'Illustration'): string
+{
+    $value = trim((string) $alt);
+    if ($value === '' || str_contains($value, '??')) {
+        return $fallback;
+    }
+
+    return $value;
 }
