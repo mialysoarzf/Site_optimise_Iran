@@ -1,8 +1,12 @@
 RewriteEngine On
 
+# Canonical: index.php -> /
+RewriteCond %{THE_REQUEST} \s/+index\.php(?:[\s?]|$) [NC]
+RewriteRule ^index\.php$ / [R=301,L]
+
 # Redirect legacy php URLs to clean URLs
-RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
-RewriteRule ^ %1 [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+([^\s?]+)\.php(?:[\s?]|$) [NC]
+RewriteRule ^ /%1 [R=301,L,NE]
 
 # Keep existing files/directories reachable
 RewriteCond %{REQUEST_FILENAME} -f [OR]

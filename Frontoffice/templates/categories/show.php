@@ -7,7 +7,7 @@
             <?php $itemExcerpt = trim((string) ($item['excerpt'] ?? '')) !== '' ? (string) $item['excerpt'] : excerpt_from_content((string) ($item['content'] ?? ''), 165); ?>
             <article class="border border-outline-variant bg-surface-container-lowest overflow-hidden">
                 <?php if (!empty($item['image_url'])): ?>
-                    <img src="<?= e((string) $item['image_url']) ?>" alt="<?= e((string) ($item['image_alt'] ?? ('Illustration de ' . $item['title']))) ?>" class="w-full h-56 object-cover" loading="lazy">
+                    <img src="<?= e(media_url((string) $item['image_url'])) ?>" alt="<?= e(safe_alt((string) ($item['image_alt'] ?? ''), 'Illustration de ' . (string) $item['title'])) ?>" class="w-full h-56 object-cover" loading="lazy">
                 <?php endif; ?>
                 <div class="p-6">
                     <p class="font-label text-[10px] tracking-[0.18em] uppercase opacity-60 mb-2"><?= e((string) date('d/m/Y', strtotime((string) ($item['published_at'] ?: $item['updated_at'] ?: $item['created_at'])))) ?></p>
