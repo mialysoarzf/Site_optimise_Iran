@@ -36,6 +36,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: site-informatif-iran-backoffice
+    environment:
+      TINYMCE_API_KEY: ${TINYMCE_API_KEY:-no-api-key}
     ports:
       - "8081:80"
     volumes:

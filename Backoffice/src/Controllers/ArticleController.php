@@ -43,6 +43,7 @@ final class ArticleController
             'article' => $this->articleFromOld(),
             'categories' => $this->categories->all(),
             'image' => null,
+            'tinyMceApiKey' => $this->config['app']['tiny_mce_api_key'] ?? 'no-api-key',
             'csrf' => Csrf::token(),
         ]);
     }
@@ -123,6 +124,7 @@ final class ArticleController
             'article' => $article,
             'categories' => $this->categories->all(),
             'image' => $image,
+            'tinyMceApiKey' => $this->config['app']['tiny_mce_api_key'] ?? 'no-api-key',
             'csrf' => Csrf::token(),
         ]);
     }
@@ -218,6 +220,36 @@ final class ArticleController
 
         set_flash('success', 'Article supprimé.');
         redirect('/admin/articles');
+    }
+
+    public function uploadEditorImage(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $csrfHeader = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
+        $csrfPost = $_POST['_csrf'] ?? null;
+        if (!Csrf::verify(is_string($csrfHeader) ? $csrfHeader : (is_string($csrfPost) ? $csrfPost : null))) {
+            http_response_code(403);
+            echo json_encode(['error' => 'CSRF invalide']);
+            return;
+        }
+
+        $file = $_FILES['file'] ?? null;
+        $result = $this->processUpload(is_array($file) ? $file : null);
+
+        if ($result['error']) {
+            http_response_code(422);
+            echo json_encode(['error' => $result['error']]);
+            return;
+        }
+
+        if (!$result['path']) {
+            http_response_code(422);
+            echo json_encode(['error' => 'Fichier image manquant']);
+            return;
+        }
+
+        echo json_encode(['location' => $result['path']]);
     }
 
     private function sanitizeArticleInput(): array
