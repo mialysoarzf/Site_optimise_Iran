@@ -75,4 +75,31 @@ SET
     published_at = EXCLUDED.published_at,
     updated_at = NOW();
 
+WITH article_rows AS (
+    SELECT id, slug
+    FROM articles
+    WHERE slug IN ('details-frappes-teheran', 'escalade-energetique-menaces-trump')
+), img_data(slug, url, alt) AS (
+    VALUES
+        (
+            'details-frappes-teheran',
+            '/uploads/frappes-teheran.png',
+            'Panache de fumée au-dessus d''installations près de Téhéran'
+        ),
+        (
+            'escalade-energetique-menaces-trump',
+            '/uploads/escalade-trump.jpg',
+            'Donald Trump évoque une escalade contre les infrastructures énergétiques'
+        )
+), deleted AS (
+    DELETE FROM images i
+    USING article_rows a
+    WHERE i.article_id = a.id
+    RETURNING i.id
+)
+INSERT INTO images (article_id, url, alt)
+SELECT a.id, d.url, d.alt
+FROM article_rows a
+JOIN img_data d ON d.slug = a.slug;
+
 COMMIT;
