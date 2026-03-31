@@ -3,7 +3,8 @@ $hero = $featured;
 $heroTitle = $hero['title'] ?? 'Veille stratégique sur la guerre en Iran';
 $heroExcerpt = $hero['excerpt'] ?? excerpt_from_content((string) ($hero['content'] ?? ''), 220);
 $heroRawImage = trim((string) ($hero['image_url'] ?? ''));
-$heroImage = media_url($heroRawImage) ?: 'https://images.unsplash.com/photo-1541417904950-b855846fe074?auto=format&fit=crop&w=1600&q=80';
+$fallbackImage = '/public/assets/img/iran2.jpeg';
+$heroImage = media_url($heroRawImage) ?: $fallbackImage;
 $heroImageOptimized = $heroRawImage !== '' ? optimized_image_url($heroRawImage, 1280, 72) : $heroImage;
 $heroImageSrcset = $heroRawImage !== '' ? optimized_image_srcset($heroRawImage, [480, 768, 1024, 1280, 1600], 72) : '';
 $heroAlt = safe_alt($hero['image_alt'] ?? '', 'Image de couverture du dossier principal');
@@ -56,7 +57,7 @@ $heroImageSource = (string) parse_url((string) $heroImage, PHP_URL_HOST);
                 <div class="home-card-media">
                     <a href="/article/<?= e((string) $item['slug']) ?>" class="home-card-media-link" aria-label="Ouvrir l’article <?= e((string) $item['title']) ?>">
                         <img
-                            src="<?= e($cardRawImage !== '' ? optimized_image_url($cardRawImage, 640, 70) : ('https://images.unsplash.com/photo-1518544866330-95a9f2f8fcd0?auto=format&fit=crop&w=900&q=75')) ?>"
+                            src="<?= e($cardRawImage !== '' ? optimized_image_url($cardRawImage, 640, 70) : $fallbackImage) ?>"
                             <?php if ($cardRawImage !== ''): ?>srcset="<?= e(optimized_image_srcset($cardRawImage, [320, 480, 640, 800], 70)) ?>" sizes="(max-width: 767px) 100vw, (max-width: 1200px) 33vw, 360px"<?php endif; ?>
                             alt="<?= e(safe_alt((string) ($item['image_alt'] ?? ''), 'Illustration de ' . ((string) ($item['title'] ?? 'article')))) ?>"
                             class="home-card-image"
