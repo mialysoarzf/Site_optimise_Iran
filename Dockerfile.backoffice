@@ -10,6 +10,8 @@ RUN apt-get update \
 WORKDIR /var/www/html
 
 COPY docker/bootstrap-assets-backoffice.sh /usr/local/bin/bootstrap-assets-backoffice.sh
-RUN chmod +x /usr/local/bin/bootstrap-assets-backoffice.sh
+RUN sed -i '1s/^\xEF\xBB\xBF//' /usr/local/bin/bootstrap-assets-backoffice.sh \
+	&& sed -i 's/\r$//' /usr/local/bin/bootstrap-assets-backoffice.sh \
+	&& chmod +x /usr/local/bin/bootstrap-assets-backoffice.sh
 
 CMD ["sh", "/usr/local/bin/bootstrap-assets-backoffice.sh"]

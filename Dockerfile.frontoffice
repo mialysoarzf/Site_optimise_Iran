@@ -11,6 +11,8 @@ RUN apt-get update \
 WORKDIR /var/www/html
 
 COPY docker/bootstrap-assets-frontoffice.sh /usr/local/bin/bootstrap-assets-frontoffice.sh
-RUN chmod +x /usr/local/bin/bootstrap-assets-frontoffice.sh
+RUN sed -i '1s/^\xEF\xBB\xBF//' /usr/local/bin/bootstrap-assets-frontoffice.sh \
+	&& sed -i 's/\r$//' /usr/local/bin/bootstrap-assets-frontoffice.sh \
+	&& chmod +x /usr/local/bin/bootstrap-assets-frontoffice.sh
 
 CMD ["sh", "/usr/local/bin/bootstrap-assets-frontoffice.sh"]

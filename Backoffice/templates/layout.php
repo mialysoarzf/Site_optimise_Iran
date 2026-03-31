@@ -34,8 +34,5 @@ $username = $_SESSION['admin_username'] ?? null;
     <?php require $templatePath; ?>
 </main>
 
-<footer class="footer container">
-    <small>Backoffice sécurisé · <?= e(date('Y')) ?></small>
-</footer>
 </body>
 </html>

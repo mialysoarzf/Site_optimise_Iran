@@ -12,11 +12,32 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./base.sql:/docker-entrypoint-initdb.d/01-base.sql:ro
+      - ./seed_guerre_iran_2026.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  db-seed:
+    image: postgres:17.5
+    container_name: site-informatif-iran-db-seed
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: app_password
+    volumes:
+      - ./base.sql:/sql/01-base.sql:ro
+      - ./seed_guerre_iran_2026.sql:/sql/02-seed.sql:ro
+    command:
+      - sh
+      - -c
+      - |
+        psql -h db -U app_user -d app_db -f /sql/01-base.sql
+        psql -h db -U app_user -d app_db -f /sql/02-seed.sql
+    restart: "no"
 
   frontoffice:
     build:
@@ -30,8 +51,8 @@ services:
     volumes:
       - ./Frontoffice:/var/www/html
     depends_on:
-      db:
-        condition: service_healthy
+      db-seed:
+        condition: service_completed_successfully
 
   backoffice:
     build:
@@ -45,8 +66,8 @@ services:
     volumes:
       - ./Backoffice:/var/www/html
     depends_on:
-      db:
-        condition: service_healthy
+      db-seed:
+        condition: service_completed_successfully
 
 volumes:
   postgres_data:
