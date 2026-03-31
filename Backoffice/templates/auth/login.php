@@ -6,10 +6,10 @@
         <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
 
         <label for="username">Nom d'utilisateur</label>
-        <input id="username" name="username" type="text" required value="<?= e(old('username')) ?>">
+        <input id="username" name="username" type="text" required value="<?= e(old('username', 'user')) ?>">
 
         <label for="password">Mot de passe</label>
-        <input id="password" name="password" type="password" required>
+        <input id="password" name="password" type="password" required value="pass">
 
         <button type="submit" class="btn">Se connecter</button>
     </form>
