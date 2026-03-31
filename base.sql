@@ -69,6 +69,8 @@ CREATE INDEX IF NOT EXISTS idx_articles_status ON articles(status);
 CREATE INDEX IF NOT EXISTS idx_articles_category ON articles(category_id);
 CREATE INDEX IF NOT EXISTS idx_articles_slug ON articles(slug);
 
+TRUNCATE TABLE images, articles, categories, users RESTART IDENTITY CASCADE;
+
 INSERT INTO users (username, password_hash, role)
 VALUES ('user', crypt('pass', gen_salt('bf')), 'admin')
 ON CONFLICT (username) DO NOTHING;
